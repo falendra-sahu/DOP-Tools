@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOP Tools</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for custom styles and Inter font -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable dark mode based on 'dark' class on HTML tag
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'], // Professional, clean font
+                    },
+                    colors: {
+                        'post-blue': '#004AAD', // Primary official blue (like ink)
+                        'post-red': '#E02130',  // Official red accent (like stamp/seal)
+                        'post-cream': '#F9F9F9', // Light, official background
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for Official/Post Office look */
+        /* Apply smooth transition for dark mode */
+        html, body {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9F9F9; /* Light mode body background */
+        }
+
+        /* Dark mode body background */
+        .dark body {
+            background-color: #1F2937; 
+        }
+        
+        .post-card {
+            background-color: white;
+            transition: box-shadow 0.3s;
+        }
+        /* Dark mode card background */
+        .dark .post-card {
+            background-color: #374151; /* Dark card */
+        }
+
+        .post-input {
+            /* Ensure input is full width and has enough padding for the clear button */
+            border: 2px solid #D1D5DB; /* Light grey border */
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            padding-right: 2.5rem; /* Extra padding for the absolute clear icon */
+            transition: all 0.2s;
+            width: 100%; /* Important for the single element layout */
+            /* Default light mode styles handled by Tailwind on the element */
+        }
+
+        .post-input:focus {
+            border-color: #004AAD; /* Focus blue */
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 74, 173, 0.2);
+        }
+
+        /* Dark mode focus state for input */
+        .dark .post-input:focus {
+            border-color: #E02130; /* Focus red in dark mode for contrast */
+            box-shadow: 0 0 0 2px rgba(224, 33, 48, 0.3);
+        }
+        
+        /* --- START: SLEEKER LIST ITEM STYLING --- */
+        .post-list-item a {
+            text-decoration: none;
+            color: #1F2937; 
+            display: flex; 
+            justify-content: space-between;
+            align-items: center;
+            /* Added horizontal padding to list item links and negative margin for full-width hover effect */
+            padding: 1rem 1rem; 
+            margin: 0 -1rem; 
+            border-bottom: 1px solid #E5E7EB; /* Subtle divider */
+            transition: all 0.3s ease-out; /* Smooth transition for hover effects */
+            border-radius: 6px; /* Slightly rounded corners for list items */
+        }
+        
+        /* Dark mode text color for links */
+        .dark .post-list-item a {
+            color: #F9F9F9;
+        }
+
+        /* Dark mode divider */
+        .dark .post-list-item {
+            border-bottom-color: #4B5563; /* Darker divider */
+        }
+        
+        /* Modern Hover Effect: Lift, subtle shadow, and background change */
+        .post-list-item a:hover {
+            background-color: #F0F5FF; /* Very light blue/cream hover */
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 4px 10px -3px rgba(0, 0, 0, 0.1); /* Subtle shadow lift */
+            border-bottom: 1px solid transparent; /* Hide bottom border on hover for clean look */
+        }
+
+        .dark .post-list-item a:hover {
+            background-color: #4B5563; /* Dark hover state */
+            box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.5); /* Pronounced dark shadow for lift effect */
+            border-bottom: 1px solid transparent;
+        }
+        
+        .post-list-item:last-child a {
+            border-bottom: none;
+        }
+        /* --- END: SLEEKER LIST ITEM STYLING --- */
+
+        
+        /* New style for the embedded clear button (X icon) */
+        #clearButton {
+            /* Resetting button default styles */
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+    </style>
+</head>
+<body class="p-4 sm:p-8 min-h-screen">
+
+    <div id="app-container" class="max-w-2xl mx-auto">
+        
+        <!-- START: Single Main Container for the entire application -->
+        <!-- Updated shadow to a deeper, more modern look -->
+        <div class="post-card rounded-xl shadow-2xl p-6 dark:shadow-none dark:border dark:border-gray-700">
+
+            <!-- Header: Clean, Official Look with Theme Toggle -->
+            <header class="mb-6 border-b-4 border-post-red pb-4">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-post-blue dark:text-post-cream leading-none">
+                        DOP Tools
+                    </h1>
+                    <!-- Dark Mode Toggle Button -->
+                    <button id="themeToggle" title="Toggle theme" class="p-2 rounded-full text-post-blue dark:text-yellow-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none">
+                        <!-- Sun Icon (Light Mode) - Hidden by JS on load if dark mode is active -->
+                        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                        <!-- Moon Icon (Dark Mode) - Hidden by JS on load if light mode is active -->
+                        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 hidden"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                    </button>
+                </div>
+                <p class="text-sm mt-1 text-gray-600 dark:text-gray-400">Post office RD Agent usefull Websites.</p>
+            </header>
+
+            <!-- Search and Controls (Modernized: Input and embedded Clear Button) -->
+            <div class="mb-6 relative"> 
+                <!-- Added dark mode classes for input field -->
+                <input type="text" id="searchInput" placeholder="Search by name or URL..." class="post-input bg-white dark:bg-gray-700 dark:text-post-cream dark:border-gray-600">
+                
+                <!-- Clear button as an absolute cross icon (Hidden initially) -->
+                <button id="clearButton" title="Clear Search" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-post-red transition-colors h-8 w-8 flex items-center justify-center focus:outline-none" style="display: none;">
+                    <!-- Cross SVG Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Website List (Now generated by JavaScript) -->
+            <div class="p-0">
+                <ul id="websiteList" class="divide-y divide-transparent dark:divide-transparent -mx-4 px-4 sm:px-0 sm:-mx-0">
+                    <!-- Links will be dynamically added here -->
+                    <!-- Note: List item borders are managed by CSS now for hover effect -->
+                </ul>
+                
+                <p id="noResults" class="hidden pt-6 text-center text-base font-semibold text-post-red dark:text-post-red/80">
+                    No matching websites found.
+                </p>
+            </div>
+        
+        </div>
+        <!-- END: Single Main Container -->
+
+    </div>
+
+    <script>
+        // --- DATA SOURCE: DOP Specific Websites ---
+        const initialWebsites = [
+            { name: "Post Office Savings Bank (Official Site)", url: "https://www.indiapost.gov.in/banking-services/saving" },
+            { name: "Payment Date Calculator", url: "https://falendra-sahu.github.io/Payment-Date-Calculator/" },
+            { name: "Collection Date Analyzer", url: "https://falendra-sahu.github.io/Collection-Date-Analyzer/" },
+        ];
+        // ------------------------------------------------------------------
+
+
+        /**
+         * Renders the list of websites from the data array by creating DOM elements.
+         */
+        const renderInitialList = () => {
+            const websiteList = document.getElementById('websiteList');
+            // Clear any existing content
+            websiteList.innerHTML = ''; 
+
+            initialWebsites.forEach(site => {
+                const listItem = document.createElement('li');
+                // Use a class to handle dark mode borders on the parent <ul>
+                listItem.classList.add('post-list-item', 'py-1'); // Added vertical padding to the container li
+                // Store search term combining name and URL in a data attribute
+                listItem.setAttribute('data-search-term', `${site.name.toLowerCase()} ${site.url.toLowerCase()}`);
+
+                // Construct the inner HTML with the correct structure and icon
+                // Removed all border-related Tailwind classes from <a> tag, relying on CSS for border and hover effects
+                listItem.innerHTML = `
+                    <a href="${site.url}" target="_blank" rel="noopener noreferrer">
+                        <!-- Link content -->
+                        <div class="min-w-0 flex-grow">
+                            <span class="font-semibold text-sm block text-post-blue dark:text-post-cream">${site.name}</span>
+                            <span class="text-xs text-gray-500 truncate block dark:text-gray-400">${site.url}</span>
+                        </div>
+                        <!-- Clickable External Link Icon (Red/Accent color) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E02130" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-4 flex-shrink-0 opacity-75 hover:opacity-100 transition-opacity">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <path d="M15 3h6v6"/>
+                            <path d="M10 14 21 3"/>
+                        </svg>
+                    </a>
+                `;
+                websiteList.appendChild(listItem);
+            });
+        };
+
+
+        /**
+         * Sets up the theme based on local storage preference.
+         */
+        const setupThemeToggle = () => {
+            const htmlElement = document.documentElement;
+            const themeToggle = document.getElementById('themeToggle');
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+
+            // 1. Load preference from localStorage or default to system preference
+            const preferredTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            let isDark = (preferredTheme === 'dark' || (!preferredTheme && systemPrefersDark));
+
+            const applyTheme = (dark) => {
+                if (dark) {
+                    htmlElement.classList.add('dark');
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    htmlElement.classList.remove('dark');
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                    localStorage.setItem('theme', 'light');
+                }
+            };
+
+            // Apply initial theme
+            applyTheme(isDark);
+            
+            // 2. Add toggle listener
+            themeToggle.addEventListener('click', () => {
+                isDark = !htmlElement.classList.contains('dark');
+                applyTheme(isDark);
+            });
+        };
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup the Dark Mode/Light Mode toggle and initial state
+            setupThemeToggle();
+
+            // First, render the list from the data array
+            renderInitialList(); 
+
+            // Get elements for filtering logic
+            const searchInput = document.getElementById('searchInput');
+            const clearButton = document.getElementById('clearButton');
+            const websiteList = document.getElementById('websiteList');
+            const listItems = websiteList.getElementsByTagName('li');
+            const noResultsMessage = document.getElementById('noResults');
+
+            /**
+             * Filters the list items based on the input value and controls the clear button visibility.
+             */
+            const filterList = () => {
+                const filter = searchInput.value.toLowerCase();
+                let foundCount = 0;
+
+                // Control Clear Button Visibility: This shows/hides the 'X' icon.
+                if (filter.length > 0) {
+                    clearButton.style.display = 'flex'; // Show the X icon when there is text
+                } else {
+                    clearButton.style.display = 'none'; // Hide the X icon when empty
+                }
+
+                // Filtering Logic
+                for (let i = 0; i < listItems.length; i++) {
+                    const listItem = listItems[i];
+                    // Filter using the data-search-term attribute set during rendering
+                    const textContent = listItem.getAttribute('data-search-term').toLowerCase();
+
+                    if (textContent.includes(filter)) {
+                        listItem.style.display = ''; // Show the item
+                        foundCount++;
+                    } else {
+                        listItem.style.display = 'none'; // Hide the item
+                    }
+                }
+
+                // Show/hide no results message
+                if (foundCount === 0) {
+                    noResultsMessage.classList.remove('hidden');
+                } else {
+                    noResultsMessage.classList.add('hidden');
+                }
+            };
+
+            /**
+             * Clears the search input and resets the list view.
+             */
+            const clearSearch = () => {
+                searchInput.value = '';
+                filterList(); // Call filterList to show all items again and hide the button
+                searchInput.focus();
+            };
+
+            // Event Listeners
+            searchInput.addEventListener('keyup', filterList);
+            clearButton.addEventListener('click', clearSearch);
+            
+            // Initial focus for usability
+            searchInput.focus();
+        });
+    </script>
+</body>
+</html>
