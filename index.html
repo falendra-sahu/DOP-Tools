@@ -128,6 +128,11 @@
             line-height: 1;
         }
 
+        /* Custom style for the toast to ensure smooth transitions */
+        .toast-transition {
+            transition: opacity 0.3s ease-in-out;
+        }
+
     </style>
 </head>
 <body class="p-4 sm:p-8 min-h-screen">
@@ -135,7 +140,6 @@
     <div id="app-container" class="max-w-2xl mx-auto">
         
         <!-- START: Single Main Container for the entire application -->
-        <!-- Updated shadow to a deeper, more modern look -->
         <div class="post-card rounded-xl shadow-2xl p-6 dark:shadow-none dark:border dark:border-gray-700">
 
             <!-- Header: Clean, Official Look with Theme Toggle -->
@@ -152,12 +156,13 @@
                         <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 hidden"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                     </button>
                 </div>
-                <p class="text-sm mt-1 text-gray-600 dark:text-gray-400">Post office RD Agent usefull Websites.</p>
+                <!-- Updated text to English -->
+                <p class="text-sm mt-1 text-gray-600 dark:text-gray-400">Useful websites for Post Office RD agents.</p>
             </header>
 
             <!-- Search and Controls (Modernized: Input and embedded Clear Button) -->
             <div class="mb-6 relative"> 
-                <!-- Added dark mode classes for input field -->
+                <!-- Updated placeholder text to English -->
                 <input type="text" id="searchInput" placeholder="Search by name or URL..." class="post-input bg-white dark:bg-gray-700 dark:text-post-cream dark:border-gray-600">
                 
                 <!-- Clear button as an absolute cross icon (Hidden initially) -->
@@ -173,9 +178,9 @@
             <div class="p-0">
                 <ul id="websiteList" class="divide-y divide-transparent dark:divide-transparent -mx-4 px-4 sm:px-0 sm:-mx-0">
                     <!-- Links will be dynamically added here -->
-                    <!-- Note: List item borders are managed by CSS now for hover effect -->
                 </ul>
                 
+                <!-- Updated no results message to English -->
                 <p id="noResults" class="hidden pt-6 text-center text-base font-semibold text-post-red dark:text-post-red/80">
                     No matching websites found.
                 </p>
@@ -186,6 +191,14 @@
 
     </div>
 
+    <!-- START: Toast Notification HTML -->
+    <div id="toastNotification" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-post-blue dark:bg-post-red text-white px-6 py-3 rounded-full shadow-2xl toast-transition opacity-0 pointer-events-none z-50 flex items-center space-x-2">
+        <!-- Kept the spinner icon as an action confirmation -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        <span></span><!-- Message will be set by JS -->
+    </div>
+    <!-- END: Toast Notification HTML -->
+
     <script>
         // --- DATA SOURCE: DOP Specific Websites ---
         const initialWebsites = [
@@ -195,6 +208,32 @@
             { name: "Collection Date Analyzer", url: "https://falendra-sahu.github.io/Collection-Date-Analyzer/" },
         ];
         // ------------------------------------------------------------------
+
+
+        /**
+         * Shows a temporary toast notification with a message.
+         * The duration is now set to 500ms.
+         * @param {string} message - The message to display in the toast.
+         */
+        const showToast = (message) => {
+            const toast = document.getElementById('toastNotification');
+            // Update message
+            const span = toast.querySelector('span');
+            if (span) span.textContent = message;
+
+            // Make toast visible
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            // Hide toast after a very short 500ms duration
+            setTimeout(() => { 
+                toast.classList.remove('opacity-100');
+                // Use setTimeout to ensure the transition completes before hiding pointer events
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'pointer-events-none');
+                }, 300); // Wait for the CSS transition duration
+            }, 500); // **UPDATED DURATION: 500ms**
+        };
 
 
         /**
@@ -213,7 +252,6 @@
                 listItem.setAttribute('data-search-term', `${site.name.toLowerCase()} ${site.url.toLowerCase()}`);
 
                 // Construct the inner HTML with the correct structure and icon
-                // Removed all border-related Tailwind classes from <a> tag, relying on CSS for border and hover effects
                 listItem.innerHTML = `
                     <a href="${site.url}" target="_blank" rel="noopener noreferrer">
                         <!-- Link content -->
@@ -229,6 +267,16 @@
                         </svg>
                     </a>
                 `;
+                
+                // --- ATTACH CLICK LISTENER FOR TOAST ---
+                const anchor = listItem.querySelector('a');
+                anchor.addEventListener('click', (event) => {
+                    // Show the confirmation toast with the English message
+                    showToast('Please wait website is loading...'); // UPDATED MESSAGE
+                    // The default action (Please wait website is loading) is allowed to proceed
+                });
+                // ---------------------------------------
+
                 websiteList.appendChild(listItem);
             });
         };
