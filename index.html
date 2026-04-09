@@ -1,393 +1,202 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOP Tools</title>
-    <!-- Load Tailwind CSS -->
+    <title>DOP Tools | Modern Agent Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Configure Tailwind for custom styles and Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
-            darkMode: 'class', // Enable dark mode based on 'dark' class on HTML tag
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'], // Professional, clean font
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        'post-blue': '#004AAD', // Primary official blue (like ink)
-                        'post-red': '#E02130',  // Official red accent (like stamp/seal)
-                        'post-cream': '#F9F9F9', // Light, official background
+                        'post-blue': '#0A58CA',
+                        'post-red': '#DC3545',
+                        'post-dark': '#0F172A',
                     }
                 }
             }
         }
     </script>
+
     <style>
-        /* Custom styles for Official/Post Office look */
-        /* Apply smooth transition for dark mode */
-        html, body {
-            transition: background-color 0.3s, color 0.3s;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F9F9F9; /* Light mode body background */
+            background: radial-gradient(circle at top right, #f8fafc, #ffffff);
+            min-height: 100vh;
         }
 
-        /* Dark mode body background */
         .dark body {
-            background-color: #1F2937; 
-        }
-        
-        .post-card {
-            background-color: white;
-            transition: box-shadow 0.3s;
-        }
-        /* Dark mode card background */
-        .dark .post-card {
-            background-color: #374151; /* Dark card */
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
         }
 
-        .post-input {
-            /* Ensure input is full width and has enough padding for the clear button */
-            border: 2px solid #D1D5DB; /* Light grey border */
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            padding-right: 2.5rem; /* Extra padding for the absolute clear icon */
-            transition: all 0.2s;
-            width: 100%; /* Important for the single element layout */
-            /* Default light mode styles handled by Tailwind on the element */
+        /* Modern Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sleek List Items */
+        .post-list-item {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 4px solid transparent;
+        }
+
+        .post-list-item:hover {
+            background: rgba(10, 88, 202, 0.04);
+            border-left-color: #0A58CA;
+            transform: translateX(6px);
+        }
+
+        .dark .post-list-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-left-color: #DC3545;
+        }
+
+        /* Search Input Focus */
         .post-input:focus {
-            border-color: #004AAD; /* Focus blue */
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(0, 74, 173, 0.2);
+            box-shadow: 0 0 0 4px rgba(10, 88, 202, 0.1);
         }
 
-        /* Dark mode focus state for input */
-        .dark .post-input:focus {
-            border-color: #E02130; /* Focus red in dark mode for contrast */
-            box-shadow: 0 0 0 2px rgba(224, 33, 48, 0.3);
-        }
-        
-        /* --- START: SLEEKER LIST ITEM STYLING --- */
-        .post-list-item a {
-            text-decoration: none;
-            color: #1F2937; 
-            display: flex; 
-            justify-content: space-between;
-            align-items: center;
-            /* Added horizontal padding to list item links and negative margin for full-width hover effect */
-            padding: 1rem 1rem; 
-            margin: 0 -1rem; 
-            border-bottom: 1px solid #E5E7EB; /* Subtle divider */
-            transition: all 0.3s ease-out; /* Smooth transition for hover effects */
-            border-radius: 6px; /* Slightly rounded corners for list items */
-        }
-        
-        /* Dark mode text color for links */
-        .dark .post-list-item a {
-            color: #F9F9F9;
-        }
-
-        /* Dark mode divider */
-        .dark .post-list-item {
-            border-bottom-color: #4B5563; /* Darker divider */
-        }
-        
-        /* Modern Hover Effect: Lift, subtle shadow, and background change */
-        .post-list-item a:hover {
-            background-color: #F0F5FF; /* Very light blue/cream hover */
-            transform: translateY(-2px); /* Slight lift */
-            box-shadow: 0 4px 10px -3px rgba(0, 0, 0, 0.1); /* Subtle shadow lift */
-            border-bottom: 1px solid transparent; /* Hide bottom border on hover for clean look */
-        }
-
-        .dark .post-list-item a:hover {
-            background-color: #4B5563; /* Dark hover state */
-            box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.5); /* Pronounced dark shadow for lift effect */
-            border-bottom: 1px solid transparent;
-        }
-        
-        .post-list-item:last-child a {
-            border-bottom: none;
-        }
-        /* --- END: SLEEKER LIST ITEM STYLING --- */
-
-        
-        /* New style for the embedded clear button (X icon) */
-        #clearButton {
-            /* Resetting button default styles */
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            line-height: 1;
-        }
-
-        /* Custom style for the toast to ensure smooth transitions */
-        .toast-transition {
-            transition: opacity 0.3s ease-in-out;
-        }
-
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
     </style>
 </head>
-<body class="p-4 sm:p-8 min-h-screen">
 
-    <div id="app-container" class="max-w-2xl mx-auto">
-        
-        <!-- START: Single Main Container for the entire application -->
-        <div class="post-card rounded-xl shadow-2xl p-6 dark:shadow-none dark:border dark:border-gray-700">
+<body class="antialiased text-slate-800 dark:text-slate-200 p-4 sm:p-12">
 
-            <!-- Header: Clean, Official Look with Theme Toggle -->
-            <header class="mb-6 border-b-4 border-post-red pb-4">
-                <div class="flex justify-between items-center">
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-post-blue dark:text-post-cream leading-none">
-                        DOP Tools
-                    </h1>
-                    <!-- Dark Mode Toggle Button -->
-                    <button id="themeToggle" title="Toggle theme" class="p-2 rounded-full text-post-blue dark:text-yellow-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none">
-                        <!-- Sun Icon (Light Mode) - Hidden by JS on load if dark mode is active -->
-                        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-                        <!-- Moon Icon (Dark Mode) - Hidden by JS on load if light mode is active -->
-                        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 hidden"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <div id="app-container" class="max-w-xl mx-auto">
+        <div class="glass-card rounded-3xl shadow-xl overflow-hidden">
+            
+            <div class="p-8 pb-4">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 class="text-3xl font-black bg-gradient-to-r from-post-blue to-blue-500 bg-clip-text text-transparent dark:from-post-red dark:to-orange-400">
+                            DOP Tools
+                        </h1>
+                        <p class="text-xs font-semibold uppercase tracking-widest text-slate-400 mt-1">Resource Hub</p>
+                    </div>
+
+                    <button id="themeToggle" class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:scale-105 transition-all active:scale-95">
+                        <svg id="sunIcon" class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                        <svg id="moonIcon" class="w-5 h-5 text-indigo-400 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
                     </button>
                 </div>
-                <!-- Updated text to English -->
-                <p class="text-sm mt-1 text-gray-600 dark:text-gray-400">Useful websites for Post Office RD agents.</p>
-            </header>
 
-            <!-- Search and Controls (Modernized: Input and embedded Clear Button) -->
-            <div class="mb-6 relative"> 
-                <!-- Updated placeholder text to English -->
-                <input type="text" id="searchInput" placeholder="Search by name or URL..." class="post-input bg-white dark:bg-gray-700 dark:text-post-cream dark:border-gray-600">
-                
-                <!-- Clear button as an absolute cross icon (Hidden initially) -->
-                <button id="clearButton" title="Clear Search" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-post-red transition-colors h-8 w-8 flex items-center justify-center focus:outline-none" style="display: none;">
-                    <!-- Cross SVG Icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-                    </svg>
-                </button>
+                <div class="relative group">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 group-focus-within:text-post-blue transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </span>
+                    <input type="text" id="searchInput" placeholder="Search for tools..." 
+                        class="post-input w-full pl-11 pr-12 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-2xl text-sm font-medium focus:ring-0 transition-all outline-none">
+                    
+                    <button id="clearButton" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-post-red hidden">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
             </div>
 
-            <!-- Website List (Now generated by JavaScript) -->
-            <div class="p-0">
-                <ul id="websiteList" class="divide-y divide-transparent dark:divide-transparent -mx-4 px-4 sm:px-0 sm:-mx-0">
-                    <!-- Links will be dynamically added here -->
-                </ul>
-                
-                <!-- Updated no results message to English -->
-                <p id="noResults" class="hidden pt-6 text-center text-base font-semibold text-post-red dark:text-post-red/80">
-                    No matching websites found.
-                </p>
+            <div class="px-2 pb-8">
+                <ul id="websiteList" class="space-y-1">
+                    </ul>
+
+                <div id="noResults" class="hidden py-12 text-center">
+                    <p class="font-bold text-slate-500">No tools found</p>
+                    <p class="text-xs text-slate-400 mt-1">Try another search term</p>
+                </div>
             </div>
-        
         </div>
-        <!-- END: Single Main Container -->
 
+        <footer class="mt-8 text-center">
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Department of Posts • Regional Hub</p>
+        </footer>
     </div>
-
-    <!-- START: Toast Notification HTML -->
-    <div id="toastNotification" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-post-blue dark:bg-post-red text-white px-6 py-3 rounded-full shadow-2xl toast-transition opacity-0 pointer-events-none z-50 flex items-center space-x-2">
-        <!-- Kept the spinner icon as an action confirmation -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-        <span></span><!-- Message will be set by JS -->
-    </div>
-    <!-- END: Toast Notification HTML -->
 
     <script>
-        // --- DATA SOURCE: DOP Specific Websites ---
         const initialWebsites = [
-            { name: "Post Office Savings Bank (Official Site)", url: "https://www.indiapost.gov.in/banking-services/saving" },
-            { name: "Post Office Reminders", url: "https://falendra-sahu.github.io/Post-Office-Reminders" },
-            { name: "Payment Date Calculator", url: "https://falendra-sahu.github.io/Payment-Date-Calculator" },
-            { name: "RD Calculator", url: "https://falendra-sahu.github.io/Post-Office-RD-Calculator" },
-            { name: "Collection Date Analyzer", url: "https://falendra-sahu.github.io/Collection-Date-Analyzer" },
+            { name: "Official Savings Bank", url: "https://www.indiapost.gov.in/banking-services/saving", tag: "POSB" },
+            { name: "Post Office Reminders", url: "https://falendra-sahu.github.io/Post-Office-Reminders", tag: "Task" },
+            { name: "Payment Date Calculator", url: "https://falendra-sahu.github.io/Payment-Date-Calculator", tag: "Calc" },
+            { name: "RD Interest Calculator", url: "https://falendra-sahu.github.io/Post-Office-RD-Calculator", tag: "Calc" },
+            { name: "Collection Date Analyzer", url: "https://falendra-sahu.github.io/Collection-Date-Analyzer", tag: "Data" },
         ];
-        // ------------------------------------------------------------------
 
-
-        /**
-         * Shows a temporary toast notification with a message.
-         * The duration is now set to 500ms.
-         * @param {string} message - The message to display in the toast.
-         */
-        const showToast = (message) => {
-            const toast = document.getElementById('toastNotification');
-            // Update message
-            const span = toast.querySelector('span');
-            if (span) span.textContent = message;
-
-            // Make toast visible
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            toast.classList.add('opacity-100');
-
-            // Hide toast after a very short 500ms duration
-            setTimeout(() => { 
-                toast.classList.remove('opacity-100');
-                // Use setTimeout to ensure the transition completes before hiding pointer events
-                setTimeout(() => {
-                    toast.classList.add('opacity-0', 'pointer-events-none');
-                }, 300); // Wait for the CSS transition duration
-            }, 500); // **UPDATED DURATION: 500ms**
-        };
-
-
-        /**
-         * Renders the list of websites from the data array by creating DOM elements.
-         */
         const renderInitialList = () => {
-            const websiteList = document.getElementById('websiteList');
-            // Clear any existing content
-            websiteList.innerHTML = ''; 
-
-            initialWebsites.forEach(site => {
-                const listItem = document.createElement('li');
-                // Use a class to handle dark mode borders on the parent <ul>
-                listItem.classList.add('post-list-item', 'py-1'); // Added vertical padding to the container li
-                // Store search term combining name and URL in a data attribute
-                listItem.setAttribute('data-search-term', `${site.name.toLowerCase()} ${site.url.toLowerCase()}`);
-
-                // Construct the inner HTML with the correct structure and icon
-                listItem.innerHTML = `
-                    <a href="${site.url}" target="_blank" rel="noopener noreferrer">
-                        <!-- Link content -->
-                        <div class="min-w-0 flex-grow">
-                            <span class="font-semibold text-sm block text-post-blue dark:text-post-cream">${site.name}</span>
-                            <span class="text-xs text-gray-500 truncate block dark:text-gray-400">${site.url}</span>
+            const list = document.getElementById('websiteList');
+            list.innerHTML = initialWebsites.map(site => `
+                <li class="post-list-item px-6 py-4 cursor-pointer" data-search-term="${site.name.toLowerCase()} ${site.url.toLowerCase()}">
+                    <a href="${site.url}" target="_blank" class="flex justify-between items-center group">
+                        <div class="flex-grow pr-4">
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="font-bold text-sm text-slate-800 dark:text-slate-100">${site.name}</span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold uppercase tracking-tight">${site.tag}</span>
+                            </div>
+                            <span class="text-xs text-slate-400 truncate block font-medium">${site.url.replace('https://', '')}</span>
                         </div>
-                        <!-- Clickable External Link Icon (Red/Accent color) -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E02130" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-4 flex-shrink-0 opacity-75 hover:opacity-100 transition-opacity">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                            <path d="M15 3h6v6"/>
-                            <path d="M10 14 21 3"/>
-                        </svg>
+                        <div class="p-2 rounded-xl text-slate-300 group-hover:text-post-blue dark:group-hover:text-post-red transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        </div>
                     </a>
-                `;
-                
-                // --- ATTACH CLICK LISTENER FOR TOAST ---
-                const anchor = listItem.querySelector('a');
-                anchor.addEventListener('click', (event) => {
-                    // Show the confirmation toast with the English message
-                    showToast('Please wait website is loading...'); // UPDATED MESSAGE
-                    // The default action (Please wait website is loading) is allowed to proceed
-                });
-                // ---------------------------------------
-
-                websiteList.appendChild(listItem);
-            });
+                </li>
+            `).join('');
         };
 
+        const setupTheme = () => {
+            const html = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+            const sun = document.getElementById('sunIcon');
+            const moon = document.getElementById('moonIcon');
 
-        /**
-         * Sets up the theme based on local storage preference.
-         */
-        const setupThemeToggle = () => {
-            const htmlElement = document.documentElement;
-            const themeToggle = document.getElementById('themeToggle');
-            const sunIcon = document.getElementById('sunIcon');
-            const moonIcon = document.getElementById('moonIcon');
-
-            // 1. Load preference from localStorage or default to system preference
-            const preferredTheme = localStorage.getItem('theme');
-            const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            let isDark = (preferredTheme === 'dark' || (!preferredTheme && systemPrefersDark));
-
-            const applyTheme = (dark) => {
-                if (dark) {
-                    htmlElement.classList.add('dark');
-                    sunIcon.classList.remove('hidden');
-                    moonIcon.classList.add('hidden');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    htmlElement.classList.remove('dark');
-                    sunIcon.classList.add('hidden');
-                    moonIcon.classList.remove('hidden');
-                    localStorage.setItem('theme', 'light');
-                }
+            const apply = (isDark) => {
+                html.classList.toggle('dark', isDark);
+                sun.classList.toggle('hidden', isDark);
+                moon.classList.toggle('hidden', !isDark);
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
             };
 
-            // Apply initial theme
-            applyTheme(isDark);
+            let isDark = localStorage.getItem('theme') === 'dark' || 
+                         (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
             
-            // 2. Add toggle listener
-            themeToggle.addEventListener('click', () => {
-                isDark = !htmlElement.classList.contains('dark');
-                applyTheme(isDark);
-            });
+            apply(isDark);
+            toggle.onclick = () => { isDark = !html.classList.contains('dark'); apply(isDark); };
         };
-
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Setup the Dark Mode/Light Mode toggle and initial state
-            setupThemeToggle();
-
-            // First, render the list from the data array
-            renderInitialList(); 
-
-            // Get elements for filtering logic
-            const searchInput = document.getElementById('searchInput');
-            const clearButton = document.getElementById('clearButton');
-            const websiteList = document.getElementById('websiteList');
-            const listItems = websiteList.getElementsByTagName('li');
-            const noResultsMessage = document.getElementById('noResults');
-
-            /**
-             * Filters the list items based on the input value and controls the clear button visibility.
-             */
-            const filterList = () => {
-                const filter = searchInput.value.toLowerCase();
-                let foundCount = 0;
-
-                // Control Clear Button Visibility: This shows/hides the 'X' icon.
-                if (filter.length > 0) {
-                    clearButton.style.display = 'flex'; // Show the X icon when there is text
-                } else {
-                    clearButton.style.display = 'none'; // Hide the X icon when empty
-                }
-
-                // Filtering Logic
-                for (let i = 0; i < listItems.length; i++) {
-                    const listItem = listItems[i];
-                    // Filter using the data-search-term attribute set during rendering
-                    const textContent = listItem.getAttribute('data-search-term').toLowerCase();
-
-                    if (textContent.includes(filter)) {
-                        listItem.style.display = ''; // Show the item
-                        foundCount++;
-                    } else {
-                        listItem.style.display = 'none'; // Hide the item
-                    }
-                }
-
-                // Show/hide no results message
-                if (foundCount === 0) {
-                    noResultsMessage.classList.remove('hidden');
-                } else {
-                    noResultsMessage.classList.add('hidden');
-                }
-            };
-
-            /**
-             * Clears the search input and resets the list view.
-             */
-            const clearSearch = () => {
-                searchInput.value = '';
-                filterList(); // Call filterList to show all items again and hide the button
-                searchInput.focus();
-            };
-
-            // Event Listeners
-            searchInput.addEventListener('keyup', filterList);
-            clearButton.addEventListener('click', clearSearch);
+            setupTheme();
+            renderInitialList();
             
-            // Initial focus for usability
-            searchInput.focus();
+            const search = document.getElementById('searchInput');
+            const clear = document.getElementById('clearButton');
+            const items = document.querySelectorAll('.post-list-item');
+
+            search.oninput = () => {
+                const val = search.value.toLowerCase();
+                let visible = 0;
+                
+                clear.style.display = val ? 'block' : 'none';
+                
+                items.forEach(item => {
+                    const match = item.dataset.searchTerm.includes(val);
+                    item.style.display = match ? 'block' : 'none';
+                    if(match) visible++;
+                });
+
+                document.getElementById('noResults').classList.toggle('hidden', visible > 0);
+            };
+
+            clear.onclick = () => { search.value = ''; search.oninput(); search.focus(); };
+            search.focus();
         });
     </script>
 </body>
