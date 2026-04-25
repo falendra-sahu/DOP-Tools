@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOP Tools | Modern Agent Portal</title>
+    <title>DOP Tools | Professional Agent Portal</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/?size=80&id=UpnwZDa50fGv&format=png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -14,9 +15,9 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        'post-blue': '#0A58CA',
-                        'post-red': '#DC3545',
-                        'post-dark': '#0F172A',
+                        'post-blue': '#2563eb', /* Professional Blue from 2nd code */
+                        'post-dark-bg': '#f3f4f6',
+                        'post-card-dark': '#1e293b'
                     }
                 }
             }
@@ -25,102 +26,125 @@
 
     <style>
         body {
-            background: radial-gradient(circle at top right, #f8fafc, #ffffff);
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background from 2nd code */
+            transition: background-color 0.3s ease;
         }
 
         .dark body {
-            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            background-color: #0f172a;
         }
 
-        /* Modern Glass Card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        /* Refined Card Style from 2nd Code */
+        .app-container {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
         }
 
-        .dark .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .dark .app-container {
+            background: #1e293b;
+            border-color: #334155;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
         }
 
-        /* Sleek List Items */
-        .post-list-item {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 4px solid transparent;
+        /* List Item Styling */
+        .tool-card {
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
         }
 
-        .post-list-item:hover {
-            background: rgba(10, 88, 202, 0.04);
-            border-left-color: #0A58CA;
-            transform: translateX(6px);
+        .tool-card:hover {
+            background: #f9fafb;
+            border-color: #e5e7eb;
+            transform: translateY(-1px);
         }
 
-        .dark .post-list-item:hover {
+        .dark .tool-card:hover {
             background: rgba(255, 255, 255, 0.03);
-            border-left-color: #DC3545;
+            border-color: #475569;
         }
 
-        /* Search Input Focus */
-        .post-input:focus {
-            box-shadow: 0 0 0 4px rgba(10, 88, 202, 0.1);
+        /* Search Input styling from 2nd Code focus style */
+        .search-field {
+            border: 1px solid #d1d5db;
+            transition: all 0.2s ease;
         }
 
-        /* Hide Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        .search-field:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .dark .search-field {
+            background: #0f172a;
+            border-color: #334155;
+            color: white;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .dark ::-webkit-scrollbar-thumb { background: #475569; }
     </style>
 </head>
 
-<body class="antialiased text-slate-800 dark:text-slate-200 p-4 sm:p-12">
+<body class="antialiased text-gray-900 dark:text-gray-100 min-h-screen flex items-center justify-center p-4">
 
-    <div id="app-container" class="max-w-xl mx-auto">
-        <div class="glass-card rounded-3xl shadow-xl overflow-hidden">
+    <div id="main-wrapper" class="w-full max-w-lg">
+        <div class="app-container rounded-2xl overflow-hidden">
             
-            <div class="p-8 pb-4">
+            <div class="p-6 border-b border-gray-100 dark:border-slate-700">
                 <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h1 class="text-3xl font-black bg-gradient-to-r from-post-blue to-blue-500 bg-clip-text text-transparent dark:from-post-red dark:to-orange-400">
-                            DOP Tools
-                        </h1>
-                        <p class="text-xs font-semibold uppercase tracking-widest text-slate-400 mt-1">Resource Hub</p>
+                    <div class="flex items-center gap-3">
+                        <div class="bg-blue-600 p-2 rounded-lg shadow-lg shadow-blue-200 dark:shadow-none">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold tracking-tight">DOP Tools</h1>
+                            <p class="text-[11px] text-gray-500 uppercase font-semibold tracking-wider">Official Agent Portal</p>
+                        </div>
                     </div>
 
-                    <button id="themeToggle" class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:scale-105 transition-all active:scale-95">
+                    <button id="themeToggle" class="p-2.5 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
                         <svg id="sunIcon" class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
                         <svg id="moonIcon" class="w-5 h-5 text-indigo-400 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
                     </button>
                 </div>
 
-                <div class="relative group">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 group-focus-within:text-post-blue transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </span>
-                    <input type="text" id="searchInput" placeholder="Search for tools..." 
-                        class="post-input w-full pl-11 pr-12 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-2xl text-sm font-medium focus:ring-0 transition-all outline-none">
+                    <input type="text" id="searchInput" placeholder="Search resources or tools..." 
+                        class="search-field w-full pl-10 pr-10 py-3 bg-gray-50 rounded-xl text-sm font-medium outline-none">
                     
-                    <button id="clearButton" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-post-red hidden">
+                    <button id="clearButton" class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-red-500 hidden">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
             </div>
 
-            <div class="px-2 pb-8">
-                <ul id="websiteList" class="space-y-1">
+            <div class="p-2 max-h-[450px] overflow-y-auto">
+                <ul id="websiteList" class="divide-y divide-gray-50 dark:divide-slate-700/50">
                     </ul>
 
-                <div id="noResults" class="hidden py-12 text-center">
-                    <p class="font-bold text-slate-500">No tools found</p>
-                    <p class="text-xs text-slate-400 mt-1">Try another search term</p>
+                <div id="noResults" class="hidden py-16 text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-400 mb-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <p class="text-sm font-bold text-gray-500">No tools found</p>
+                    <p class="text-xs text-gray-400 mt-1">Try a different keyword</p>
                 </div>
             </div>
-        </div>
 
-        <footer class="mt-8 text-center">
-            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Department of Posts • Regional Hub</p>
-        </footer>
+            <div class="p-4 bg-gray-50 dark:bg-slate-800/50 border-t border-gray-100 dark:border-slate-700 text-center">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">Powerd By ❤️ FALENDRA SAHU</p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -135,17 +159,17 @@
         const renderInitialList = () => {
             const list = document.getElementById('websiteList');
             list.innerHTML = initialWebsites.map(site => `
-                <li class="post-list-item px-6 py-4 cursor-pointer" data-search-term="${site.name.toLowerCase()} ${site.url.toLowerCase()}">
-                    <a href="${site.url}" target="_blank" class="flex justify-between items-center group">
+                <li class="tool-card rounded-xl overflow-hidden group" data-search-term="${site.name.toLowerCase()} ${site.url.toLowerCase()}">
+                    <a href="${site.url}" target="_blank" class="flex items-center p-4 transition-all">
                         <div class="flex-grow pr-4">
-                            <div class="flex items-center gap-2 mb-0.5">
-                                <span class="font-bold text-sm text-slate-800 dark:text-slate-100">${site.name}</span>
-                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold uppercase tracking-tight">${site.tag}</span>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-[14px] text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${site.name}</span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider border border-blue-100 dark:border-blue-800/50">${site.tag}</span>
                             </div>
-                            <span class="text-xs text-slate-400 truncate block font-medium">${site.url.replace('https://', '')}</span>
+                            <span class="text-[11px] text-gray-400 truncate block font-medium tracking-tight">${site.url.replace('https://', '')}</span>
                         </div>
-                        <div class="p-2 rounded-xl text-slate-300 group-hover:text-post-blue dark:group-hover:text-post-red transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-300 group-hover:bg-blue-50 group-hover:text-blue-500 dark:group-hover:bg-blue-900/40 transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </div>
                     </a>
                 </li>
@@ -178,25 +202,24 @@
             
             const search = document.getElementById('searchInput');
             const clear = document.getElementById('clearButton');
-            const items = document.querySelectorAll('.post-list-item');
+            const items = document.querySelectorAll('.tool-card');
 
             search.oninput = () => {
                 const val = search.value.toLowerCase();
-                let visible = 0;
+                let visibleCount = 0;
                 
                 clear.style.display = val ? 'block' : 'none';
                 
                 items.forEach(item => {
                     const match = item.dataset.searchTerm.includes(val);
                     item.style.display = match ? 'block' : 'none';
-                    if(match) visible++;
+                    if(match) visibleCount++;
                 });
 
-                document.getElementById('noResults').classList.toggle('hidden', visible > 0);
+                document.getElementById('noResults').classList.toggle('hidden', visibleCount > 0);
             };
 
             clear.onclick = () => { search.value = ''; search.oninput(); search.focus(); };
-            search.focus();
         });
     </script>
 </body>
