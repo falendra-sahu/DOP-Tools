@@ -1,226 +1,541 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOP Tools | Professional Agent Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a56db">
+    <title>DOP Tools | Agent Portal</title>
     <link rel="icon" type="image/png" href="https://img.icons8.com/?size=80&id=UpnwZDa50fGv&format=png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        'post-blue': '#2563eb', /* Professional Blue from 2nd code */
-                        'post-dark-bg': '#f3f4f6',
-                        'post-card-dark': '#1e293b'
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --blue: #1a56db;
+            --blue-light: #ebf0ff;
+            --blue-mid: #3b82f6;
+            --bg: #f0f4ff;
+            --surface: #ffffff;
+            --surface2: #f7f9ff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text2: #475569;
+            --text3: #94a3b8;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        .dark {
+            --bg: #0a0f1e;
+            --surface: #111827;
+            --surface2: #1a2235;
+            --border: #1e2d45;
+            --text: #f1f5f9;
+            --text2: #94a3b8;
+            --text3: #4b5c75;
+            --blue-light: #1e2d45;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background from 2nd code */
-            transition: background-color 0.3s ease;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .dark body {
-            background-color: #0f172a;
+        /* === STATUS BAR SPACER === */
+        .status-bar {
+            height: var(--safe-top);
+            background: var(--blue);
+            flex-shrink: 0;
         }
 
-        /* Refined Card Style from 2nd Code */
-        .app-container {
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
+        /* === HEADER === */
+        .header {
+            background: var(--blue);
+            padding: 16px 20px 20px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .dark .app-container {
-            background: #1e293b;
-            border-color: #334155;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            pointer-events: none;
         }
 
-        /* List Item Styling */
-        .tool-card {
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px; left: 30px;
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+            pointer-events: none;
         }
 
-        .tool-card:hover {
-            background: #f9fafb;
-            border-color: #e5e7eb;
-            transform: translateY(-1px);
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
         }
 
-        .dark .tool-card:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: #475569;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        /* Search Input styling from 2nd Code focus style */
-        .search-field {
-            border: 1px solid #d1d5db;
-            transition: all 0.2s ease;
+        .brand-icon {
+            width: 42px; height: 42px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.25);
         }
 
-        .search-field:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        .brand-icon svg {
+            width: 22px; height: 22px;
+            stroke: white; fill: none;
         }
 
-        .dark .search-field {
-            background: #0f172a;
-            border-color: #334155;
+        .brand-text h1 {
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            line-height: 1;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-text p {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.65);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-top: 2px;
+        }
+
+        .theme-btn {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.14);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+            transition: background 0.2s;
+            color: white;
+            font-size: 17px;
+        }
+
+        .theme-btn:active { background: rgba(255,255,255,0.25); }
+
+        /* === SEARCH === */
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px; top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .search-icon svg { width: 16px; height: 16px; stroke: var(--text3); }
+
+        #searchInput {
+            width: 100%;
+            padding: 13px 42px 13px 42px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: 500;
+            outline: none;
+            backdrop-filter: blur(10px);
+            transition: background 0.2s, border 0.2s;
+        }
+
+        #searchInput::placeholder { color: rgba(255,255,255,0.55); }
+        #searchInput:focus { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.4); }
+
+        .clear-btn {
+            position: absolute;
+            right: 10px; top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 6px;
+            width: 26px; height: 26px;
+            cursor: pointer;
+            display: none;
+            align-items: center; justify-content: center;
             color: white;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        .clear-btn svg { width: 14px; height: 14px; stroke: currentColor; }
+        .clear-btn.visible { display: flex; }
+
+        /* === STATS BAR === */
+        .stats-bar {
+            padding: 10px 20px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stats-bar span {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .count-badge {
+            background: var(--blue-light);
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        /* === SCROLLABLE LIST === */
+        .list-container {
+            flex: 1;
+            overflow-y: auto;
+            background: var(--bg);
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .list-container::-webkit-scrollbar { display: none; }
+
+        .list-inner {
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* === TOOL CARD === */
+        .tool-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: transform 0.15s, box-shadow 0.15s;
+            animation: slideUp 0.3s ease both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tool-card:nth-child(1) { animation-delay: 0.04s; }
+        .tool-card:nth-child(2) { animation-delay: 0.08s; }
+        .tool-card:nth-child(3) { animation-delay: 0.12s; }
+        .tool-card:nth-child(4) { animation-delay: 0.16s; }
+        .tool-card:nth-child(5) { animation-delay: 0.20s; }
+        .tool-card:nth-child(6) { animation-delay: 0.24s; }
+
+        .tool-card a {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            gap: 14px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tool-card:active { transform: scale(0.985); }
+
+        .tool-icon-wrap {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+        }
+
+        .tool-info { flex: 1; min-width: 0; }
+
+        .tool-name-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 3px;
+        }
+
+        .tool-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tool-tag {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: var(--blue-light);
+            color: var(--blue);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            flex-shrink: 0;
+        }
+
+        .tool-url {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text3);
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tool-arrow {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: var(--surface2);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+
+        .tool-arrow svg { width: 14px; height: 14px; stroke: var(--text3); }
+        .tool-card:active .tool-arrow { background: var(--blue-light); }
+        .tool-card:active .tool-arrow svg { stroke: var(--blue); }
+
+        /* === NO RESULTS === */
+        .no-results {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 24px;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .no-results.visible { display: flex; }
+
+        .no-results-icon {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .no-results h3 { font-size: 15px; font-weight: 700; color: var(--text2); }
+        .no-results p { font-size: 13px; color: var(--text3); }
+
+        /* === FOOTER === */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 12px 20px;
+            padding-bottom: calc(12px + var(--safe-bottom));
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .footer p {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        /* Tag color variants */
+        .tag-posb { background: #ecfdf5; color: #059669; }
+        .dark .tag-posb { background: #052e1a; color: #34d399; }
+        .tag-tracker { background: #fdf4ff; color: #9333ea; }
+        .dark .tag-tracker { background: #1e0a2e; color: #c084fc; }
+        .tag-task { background: #fff7ed; color: #ea580c; }
+        .dark .tag-task { background: #2d1500; color: #fb923c; }
+        .tag-calc { background: var(--blue-light); color: var(--blue); }
+        .tag-data { background: #fef2f2; color: #dc2626; }
+        .dark .tag-data { background: #2d0a0a; color: #f87171; }
+
+        .icon-posb { background: #ecfdf5; }
+        .dark .icon-posb { background: #052e1a; }
+        .icon-tracker { background: #fdf4ff; }
+        .dark .icon-tracker { background: #1e0a2e; }
+        .icon-task { background: #fff7ed; }
+        .dark .icon-task { background: #2d1500; }
+        .icon-calc { background: var(--blue-light); }
+        .icon-data { background: #fef2f2; }
+        .dark .icon-data { background: #2d0a0a; }
     </style>
 </head>
+<body>
 
-<body class="antialiased text-gray-900 dark:text-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="status-bar"></div>
 
-    <div id="main-wrapper" class="w-full max-w-lg">
-        <div class="app-container rounded-2xl overflow-hidden">
-            
-            <div class="p-6 border-b border-gray-100 dark:border-slate-700">
-                <div class="flex justify-between items-center mb-6">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-blue-600 p-2 rounded-lg shadow-lg shadow-blue-200 dark:shadow-none">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h1 class="text-xl font-bold tracking-tight">DOP Tools</h1>
-                            <p class="text-[11px] text-gray-500 uppercase font-semibold tracking-wider">Official Agent Portal</p>
-                        </div>
-                    </div>
-
-                    <button id="themeToggle" class="p-2.5 rounded-xl bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
-                        <svg id="sunIcon" class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
-                        <svg id="moonIcon" class="w-5 h-5 text-indigo-400 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
-                    </button>
+    <header class="header">
+        <div class="header-top">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
                 </div>
-
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </span>
-                    <input type="text" id="searchInput" placeholder="Search resources or tools..." 
-                        class="search-field w-full pl-10 pr-10 py-3 bg-gray-50 rounded-xl text-sm font-medium outline-none">
-                    
-                    <button id="clearButton" class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-red-500 hidden">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                    </button>
+                <div class="brand-text">
+                    <h1>DOP Tools</h1>
+                    <p>Official Agent Portal</p>
                 </div>
             </div>
+            <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">☀️</button>
+        </div>
 
-            <div class="p-2 max-h-[450px] overflow-y-auto">
-                <ul id="websiteList" class="divide-y divide-gray-50 dark:divide-slate-700/50">
-                    </ul>
+        <div class="search-wrap">
+            <span class="search-icon">
+                <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </span>
+            <input type="text" id="searchInput" placeholder="Search tools..." autocomplete="off" autocorrect="off" spellcheck="false" oninput="handleSearch(this)">
+            <button class="clear-btn" id="clearBtn" onclick="clearSearch()" aria-label="Clear search">
+                <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+    </header>
 
-                <div id="noResults" class="hidden py-16 text-center">
-                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-400 mb-3">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <p class="text-sm font-bold text-gray-500">No tools found</p>
-                    <p class="text-xs text-gray-400 mt-1">Try a different keyword</p>
-                </div>
-            </div>
+    <div class="stats-bar">
+        <span>Available Tools</span>
+        <span class="count-badge" id="countBadge">6</span>
+    </div>
 
-            <div class="p-4 bg-gray-50 dark:bg-slate-800/50 border-t border-gray-100 dark:border-slate-700 text-center">
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">Powerd By ❤️ FALENDRA SAHU</p>
-            </div>
+    <div class="list-container">
+        <div class="list-inner" id="listInner">
+            <!-- rendered by JS -->
+        </div>
+        <div class="no-results" id="noResults">
+            <div class="no-results-icon">🔍</div>
+            <h3>No tools found</h3>
+            <p>Try a different keyword</p>
         </div>
     </div>
 
+    <footer class="footer">
+        <p>Powered by ❤️ Falendra Sahu</p>
+    </footer>
+
     <script>
-        const initialWebsites = [
-            { name: "Official Savings Bank", url: "https://www.indiapost.gov.in/banking-services/saving", tag: "POSB" },
-            { name: "Post Office Reminders", url: "https://falendra-sahu.github.io/Post-Office-Reminders", tag: "Task" },
-            { name: "Payment Date Calculator", url: "https://falendra-sahu.github.io/Payment-Date-Calculator", tag: "Calc" },
-            { name: "RD Interest Calculator", url: "https://falendra-sahu.github.io/Post-Office-RD-Calculator", tag: "Calc" },
-            { name: "Collection Date Analyzer", url: "https://falendra-sahu.github.io/Collection-Date-Analyzer", tag: "Data" },
+        const sites = [
+            { name: "Official Savings Bank", url: "https://www.indiapost.gov.in/banking-services/saving", tag: "POSB", icon: "🏦", colorClass: "posb" },
+            { name: "DOP Tracker", url: "https://falendra-sahu.github.io/DOP-Tracker", tag: "Tracker", icon: "📊", colorClass: "tracker" },
+            { name: "Post Office Reminders", url: "https://falendra-sahu.github.io/Post-Office-Reminders", tag: "Task", icon: "🔔", colorClass: "task" },
+            { name: "Payment Date Calculator", url: "https://falendra-sahu.github.io/Payment-Date-Calculator", tag: "Calc", icon: "📅", colorClass: "calc" },
+            { name: "RD Interest Calculator", url: "https://falendra-sahu.github.io/Post-Office-RD-Calculator", tag: "Calc", icon: "🧮", colorClass: "calc" },
+            { name: "Collection Date Analyzer", url: "https://falendra-sahu.github.io/Collection-Date-Analyzer", tag: "Data", icon: "📈", colorClass: "data" },
         ];
 
-        const renderInitialList = () => {
-            const list = document.getElementById('websiteList');
-            list.innerHTML = initialWebsites.map(site => `
-                <li class="tool-card rounded-xl overflow-hidden group" data-search-term="${site.name.toLowerCase()} ${site.url.toLowerCase()}">
-                    <a href="${site.url}" target="_blank" class="flex items-center p-4 transition-all">
-                        <div class="flex-grow pr-4">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="font-bold text-[14px] text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${site.name}</span>
-                                <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider border border-blue-100 dark:border-blue-800/50">${site.tag}</span>
+        const listInner = document.getElementById('listInner');
+        const noResults = document.getElementById('noResults');
+        const countBadge = document.getElementById('countBadge');
+
+        function renderList(filtered) {
+            if (filtered.length === 0) {
+                listInner.innerHTML = '';
+                noResults.classList.add('visible');
+                countBadge.textContent = '0';
+                return;
+            }
+            noResults.classList.remove('visible');
+            countBadge.textContent = filtered.length;
+            listInner.innerHTML = filtered.map(s => `
+                <div class="tool-card">
+                    <a href="${s.url}" target="_blank" rel="noopener">
+                        <div class="tool-icon-wrap icon-${s.colorClass}">${s.icon}</div>
+                        <div class="tool-info">
+                            <div class="tool-name-row">
+                                <span class="tool-name">${s.name}</span>
+                                <span class="tool-tag tag-${s.colorClass}">${s.tag}</span>
                             </div>
-                            <span class="text-[11px] text-gray-400 truncate block font-medium tracking-tight">${site.url.replace('https://', '')}</span>
+                            <span class="tool-url">${s.url.replace('https://','')}</span>
                         </div>
-                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 dark:bg-slate-800 text-gray-300 group-hover:bg-blue-50 group-hover:text-blue-500 dark:group-hover:bg-blue-900/40 transition-all">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        <div class="tool-arrow">
+                            <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </div>
                     </a>
-                </li>
+                </div>
             `).join('');
-        };
+        }
 
-        const setupTheme = () => {
-            const html = document.documentElement;
-            const toggle = document.getElementById('themeToggle');
-            const sun = document.getElementById('sunIcon');
-            const moon = document.getElementById('moonIcon');
+        function handleSearch(input) {
+            const val = input.value.toLowerCase().trim();
+            document.getElementById('clearBtn').classList.toggle('visible', val.length > 0);
+            const filtered = val ? sites.filter(s =>
+                s.name.toLowerCase().includes(val) || s.tag.toLowerCase().includes(val)
+            ) : sites;
+            renderList(filtered);
+        }
 
-            const apply = (isDark) => {
-                html.classList.toggle('dark', isDark);
-                sun.classList.toggle('hidden', isDark);
-                moon.classList.toggle('hidden', !isDark);
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            };
+        function clearSearch() {
+            const inp = document.getElementById('searchInput');
+            inp.value = '';
+            handleSearch(inp);
+            inp.focus();
+        }
 
-            let isDark = localStorage.getItem('theme') === 'dark' || 
-                         (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            
-            apply(isDark);
-            toggle.onclick = () => { isDark = !html.classList.contains('dark'); apply(isDark); };
-        };
+        // Theme
+        const html = document.documentElement;
+        const btn = document.getElementById('themeBtn');
+        let dark = localStorage.getItem('dop-theme') === 'dark' ||
+            (!localStorage.getItem('dop-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-        document.addEventListener('DOMContentLoaded', () => {
-            setupTheme();
-            renderInitialList();
-            
-            const search = document.getElementById('searchInput');
-            const clear = document.getElementById('clearButton');
-            const items = document.querySelectorAll('.tool-card');
+        function applyTheme() {
+            html.classList.toggle('dark', dark);
+            btn.textContent = dark ? '🌙' : '☀️';
+        }
 
-            search.oninput = () => {
-                const val = search.value.toLowerCase();
-                let visibleCount = 0;
-                
-                clear.style.display = val ? 'block' : 'none';
-                
-                items.forEach(item => {
-                    const match = item.dataset.searchTerm.includes(val);
-                    item.style.display = match ? 'block' : 'none';
-                    if(match) visibleCount++;
-                });
+        function toggleTheme() {
+            dark = !dark;
+            localStorage.setItem('dop-theme', dark ? 'dark' : 'light');
+            applyTheme();
+        }
 
-                document.getElementById('noResults').classList.toggle('hidden', visibleCount > 0);
-            };
-
-            clear.onclick = () => { search.value = ''; search.oninput(); search.focus(); };
-        });
+        applyTheme();
+        renderList(sites);
     </script>
 </body>
 </html>
